@@ -1,16 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.petlog.petlog;
 
-/**
- *
- * @author LENOVO
- */
+import com.petlog.petlog.ui.LoginForm;
+import java.util.Locale;
+
 public class PetLog {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        // Ganti ke Bahasa Indonesia jika ingin
+        Locale locale = new Locale("en", "US");
+
+        // Tampilkan form login
+        new LoginForm(locale);
     }
 }

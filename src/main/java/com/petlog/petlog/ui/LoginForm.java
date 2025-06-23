@@ -1,5 +1,7 @@
 package com.petlog.petlog.ui;
 
+import com.petlog.petlog.service.UserService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -76,10 +78,10 @@ public class LoginForm extends JFrame {
             String user = usernameField.getText();
             String pass = new String(passwordField.getPassword());
 
-            if (user.equals("admin") && pass.equals("1234")) {
+            if (UserService.checkLogin(user, pass)) {
                 JOptionPane.showMessageDialog(this, bundle.getString("message.login.success"));
-                dispose();
-                new MainForm(); // Form utama setelah login
+                dispose(); // Tutup login
+                new Dashboard().setVisible(true); // Ganti dengan form utama
             } else {
                 JOptionPane.showMessageDialog(this, bundle.getString("message.login.fail"));
             }

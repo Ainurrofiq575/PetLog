@@ -11,31 +11,42 @@
         <exec.mainClass>com.petlog.petlog.PetLog</exec.mainClass>
     </properties>
     <dependencies>
-    <!-- MongoDB Java Driver -->
-    <dependency>
-        <groupId>org.mongodb</groupId>
-        <artifactId>mongodb-driver-sync</artifactId>
-        <version>4.11.0</version>
-    </dependency>
+        <!-- MongoDB Java Driver -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.11.0</version>
+        </dependency>
 
-    <!-- JUnit 5 (untuk unit testing) -->
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>5.9.3</version>
-        <scope>test</scope>
-    </dependency>
+        <!-- JUnit 5 (untuk unit testing) -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.3</version>
+            <scope>test</scope>
+        </dependency>
 
-    <!-- Exec Plugin (untuk jalankan class Java utama lewat Maven) -->
-    <dependency>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.1.0</version>
-    </dependency>
+        <!-- Exec Plugin (untuk jalankan class Java utama lewat Maven) -->
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.1.0</version>
+        </dependency>
         <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE230</version>
+        </dependency>
+        <!-- Dependency MongoDB Java Driver -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>5.4.0</version>
         </dependency>
     </dependencies>
 

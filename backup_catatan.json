@@ -1,3 +1,4 @@
 [
-
+{"_id": {"$oid": "685899d0b7729549a347e39e"}, "jenis": "growming", "tanggal": "2025-06-26", "catatan": "biar bersih dan wangi"},
+{"_id": {"$oid": "68613f44a2db66f67a7bf5a3"}, "jenis": "Steril", "tanggal": "2025-06-12", "catatan": "Leo si anjing buldog"}
 ]

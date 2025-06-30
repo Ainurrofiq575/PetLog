@@ -5,6 +5,7 @@ import com.petlog.petlog.service.UserService;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -14,90 +15,145 @@ public class LoginForm extends JFrame {
     public LoginForm(Locale locale) {
         bundle = ResourceBundle.getBundle("messages", locale);
         setTitle(bundle.getString("app.title"));
-        setSize(600, 400);
+        setSize(700, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(null); // Manual layout untuk desain bebas
+        setLayout(null);
 
-        // Panel utama (background abu-abu)
+        Color lightBrown = new Color(234, 213, 194);
+        Color darkBrown = new Color(90, 56, 36);
+        Color accent = new Color(255, 153, 102);
+
+        // Background panel utama
         JPanel backgroundPanel = new JPanel();
         backgroundPanel.setLayout(null);
-        backgroundPanel.setBackground(Color.LIGHT_GRAY);
-        backgroundPanel.setBounds(0, 0, 600, 400);
+        backgroundPanel.setBackground(lightBrown);
+        backgroundPanel.setBounds(0, 0, 700, 400);
         add(backgroundPanel);
 
-        // Combo box untuk pilih bahasa
-        JLabel languageLabel = new JLabel("Choose Language :");
-        languageLabel.setBounds(380, 20, 120, 25);
-        backgroundPanel.add(languageLabel);
+        // Panel kiri untuk gambar
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBounds(0, 0, 350, 400);
+        leftPanel.setBackground(lightBrown);
+        leftPanel.setLayout(new BorderLayout());
 
-        JComboBox<String> languageCombo = new JComboBox<>(new String[]{"English", "Bahasa Indonesia"});
-        languageCombo.setBounds(490, 20, 90, 25);
-        backgroundPanel.add(languageCombo);
+        // Gambar hewan
+        URL iconUrl = getClass().getResource("/img/pet-icon.png");
+        if (iconUrl != null) {
+            JLabel imageLabel = new JLabel(new ImageIcon(iconUrl));
+            imageLabel.setHorizontalAlignment(JLabel.CENTER);
+            leftPanel.add(imageLabel, BorderLayout.CENTER);
+        } else {
+            JLabel placeholder = new JLabel("🐾 Pet App", JLabel.CENTER);
+            placeholder.setFont(new Font("Poppins", Font.BOLD, 24));
+            leftPanel.add(placeholder, BorderLayout.CENTER);
+        }
+        backgroundPanel.add(leftPanel);
 
-        // Panel hitam di tengah
+        // Panel kanan untuk form login
         JPanel formPanel = new JPanel();
         formPanel.setLayout(null);
-        formPanel.setBackground(Color.BLACK);
-        formPanel.setBounds(80, 70, 450, 230);
+        formPanel.setBackground(darkBrown);
+        formPanel.setBounds(350, 0, 350, 400);
         backgroundPanel.add(formPanel);
 
-        // Label Username
+        // Label bahasa
+        JLabel languageLabel = new JLabel("🌐 Language:");
+        languageLabel.setForeground(Color.WHITE);
+        languageLabel.setBounds(200, 10, 100, 25);
+        formPanel.add(languageLabel);
+
+        JComboBox<String> languageCombo = new JComboBox<>(new String[]{"English", "Bahasa Indonesia"});
+        languageCombo.setBounds(200, 35, 130, 25);
+        formPanel.add(languageCombo);
+
+        // Atur ComboBox sesuai locale saat ini
+        if (locale.getLanguage().equals("id")) {
+            languageCombo.setSelectedIndex(1);
+        } else {
+            languageCombo.setSelectedIndex(0);
+        }
+
+        // Username
         JLabel userLabel = new JLabel(bundle.getString("label.username"));
         userLabel.setForeground(Color.WHITE);
-        userLabel.setBounds(40, 30, 100, 25);
+        userLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+        userLabel.setBounds(40, 90, 100, 25);
         formPanel.add(userLabel);
 
         JTextField usernameField = new JTextField();
-        usernameField.setBounds(150, 30, 250, 25);
+        usernameField.setBounds(40, 115, 260, 30);
+        usernameField.setBackground(Color.WHITE);
         formPanel.add(usernameField);
 
-        // Label Password
+        // Password
         JLabel passLabel = new JLabel(bundle.getString("label.password"));
         passLabel.setForeground(Color.WHITE);
-        passLabel.setBounds(40, 70, 100, 25);
+        passLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+        passLabel.setBounds(40, 160, 100, 25);
         formPanel.add(passLabel);
 
         JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds(150, 70, 250, 25);
+        passwordField.setBounds(40, 185, 260, 30);
+        passwordField.setBackground(Color.WHITE);
         formPanel.add(passwordField);
 
         // Tombol Login
         JButton loginButton = new JButton(bundle.getString("button.login"));
-        loginButton.setBounds(300, 110, 100, 30);
+        loginButton.setBounds(200, 230, 100, 35);
+        loginButton.setBackground(accent);
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFocusPainted(false);
         formPanel.add(loginButton);
 
-        // Label Forgot Password
-        JLabel forgotLabel = new JLabel("Forgot Password ?");
+        // Tombol Register
+        JButton registerButton = new JButton("Register");
+        registerButton.setBounds(40, 230, 100, 35);
+        registerButton.setBackground(accent);
+        registerButton.setForeground(Color.WHITE);
+        registerButton.setFocusPainted(false);
+        formPanel.add(registerButton);
+
+        // Aksi klik tombol register
+        registerButton.addActionListener((ActionEvent e) -> {
+            new RegisterForm();
+        });
+
+        // Lupa Password
+        JLabel forgotLabel = new JLabel("🔒 Forgot Password?");
         forgotLabel.setForeground(Color.WHITE);
-        forgotLabel.setBounds(40, 170, 150, 25);
+        forgotLabel.setFont(new Font("Poppins", Font.ITALIC, 12));
+        forgotLabel.setBounds(40, 280, 200, 25);
         formPanel.add(forgotLabel);
 
-        // Aksi Login
+        // Aksi login
         loginButton.addActionListener((ActionEvent e) -> {
             String user = usernameField.getText();
             String pass = new String(passwordField.getPassword());
 
-            if (UserService.checkLogin(user, pass)) {
+            if (UserService.checkLoginHashed(user, pass)) {
                 JOptionPane.showMessageDialog(this, bundle.getString("message.login.success"));
-                dispose(); // Tutup login
-                new Dashboard().setVisible(true); // Ganti dengan form utama
+                dispose();
+                new Dashboard().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, bundle.getString("message.login.fail"));
             }
         });
 
-        // Ganti bahasa dari combo box
+        // Aksi ganti bahasa
         languageCombo.addActionListener(e -> {
-            Locale selectedLocale = languageCombo.getSelectedIndex() == 0 ? new Locale("en", "US") : new Locale("id", "ID");
-            dispose();
-            new LoginForm(selectedLocale);
+            Locale selectedLocale = languageCombo.getSelectedIndex() == 0
+                ? new Locale("en", "US")
+                : new Locale("id", "ID");
+            dispose(); // Tutup jendela sekarang
+            new LoginForm(selectedLocale); // Buka baru dengan locale baru
         });
 
         setVisible(true);
     }
 
     public static void main(String[] args) {
-        new LoginForm(new Locale("en", "US")); // Default Inggris
+        new LoginForm(new Locale("en", "US"));
     }
+
 }

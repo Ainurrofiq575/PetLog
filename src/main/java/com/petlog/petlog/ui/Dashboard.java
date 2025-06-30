@@ -7,12 +7,19 @@ package com.petlog.petlog.ui;
 import com.mongodb.client.MongoCollection;
 import com.petlog.petlog.service.BackupService;
 import com.petlog.petlog.service.MongoDBConnect;
+import java.awt.BorderLayout;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimerTask;
 import javax.swing.JOptionPane;
 import org.bson.Document;
 import javax.sound.sampled.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 /**
  *
@@ -27,6 +34,8 @@ public class Dashboard extends javax.swing.JFrame {
         StartClock();
         initComponents();
         startReminderThread(); // 🔁 Jalankan thread pengingat
+        tampilkanGrafik();
+//        tampilkanBarChart();
         
     }
     
@@ -91,6 +100,7 @@ private void startReminderThread() {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -105,10 +115,11 @@ private void startReminderThread() {
         lblWelcome = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         lblClock = new javax.swing.JLabel();
+        panelChart = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(0, 51, 51));
+        jPanel1.setBackground(new java.awt.Color(90, 56, 36));
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 50));
 
         jLabel1.setFont(new java.awt.Font("DFKaiSho-SB", 1, 24)); // NOI18N
@@ -116,6 +127,7 @@ private void startReminderThread() {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Welcome to PetLog!");
 
+        jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Cambria", 0, 8)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("🐾 PetLog - Dashboard");
@@ -125,7 +137,7 @@ private void startReminderThread() {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,7 +150,7 @@ private void startReminderThread() {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setBackground(new java.awt.Color(0, 51, 51));
+        jPanel2.setBackground(new java.awt.Color(204, 132, 67));
         jPanel2.setPreferredSize(new java.awt.Dimension(400, 50));
 
         jButton4.setText("🚪 Logout");
@@ -162,7 +174,7 @@ private void startReminderThread() {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jButton6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 438, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addGap(21, 21, 21))
         );
@@ -170,85 +182,115 @@ private void startReminderThread() {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton6))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
-        jPanel3.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel3.setBackground(new java.awt.Color(255, 247, 230));
+        jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        jButton1.setBackground(new java.awt.Color(255, 153, 102));
         jButton1.setText("💉 Jadwal Vaksin");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 12, 0, 0);
+        jPanel3.add(jButton1, gridBagConstraints);
 
+        jButton2.setBackground(new java.awt.Color(255, 153, 102));
         jButton2.setText("🐾 Data Hewan");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 22;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 12, 0, 0);
+        jPanel3.add(jButton2, gridBagConstraints);
 
+        jButton3.setBackground(new java.awt.Color(255, 153, 102));
         jButton3.setText("📋 catatan perawatan");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = -10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 12, 0, 0);
+        jPanel3.add(jButton3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel3.add(lblWelcome, gridBagConstraints);
 
+        jButton5.setBackground(new java.awt.Color(255, 153, 102));
         jButton5.setText("💾 Backup Data");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 12, 0, 0);
+        jPanel3.add(jButton5, gridBagConstraints);
 
         lblClock.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        lblClock.setForeground(new java.awt.Color(255, 255, 255));
         lblClock.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblClock.setText("<JAM>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.ipadx = 350;
+        gridBagConstraints.ipady = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
+        jPanel3.add(lblClock, gridBagConstraints);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(lblWelcome)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 66, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(45, 45, 45))
-            .addComponent(lblClock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        javax.swing.GroupLayout panelChartLayout = new javax.swing.GroupLayout(panelChart);
+        panelChart.setLayout(panelChartLayout);
+        panelChartLayout.setHorizontalGroup(
+            panelChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 239, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(9, 9, 9)
-                .addComponent(lblClock)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblWelcome)
-                .addGap(28, 28, 28)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton5))
-                .addContainerGap(70, Short.MAX_VALUE))
+        panelChartLayout.setVerticalGroup(
+            panelChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 153, Short.MAX_VALUE)
         );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.ipadx = 239;
+        gridBagConstraints.ipady = 153;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 12, 6, 0);
+        jPanel3.add(panelChart, gridBagConstraints);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
@@ -258,13 +300,12 @@ private void startReminderThread() {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         new VaksinForm().setVisible(true);
-        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        dispose();
         new LoginForm(new java.util.Locale("en", "US")); // Kembali ke login
+                dispose();
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -287,7 +328,9 @@ private void startReminderThread() {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        dispose();
             new LaporanTableForm().setVisible(true);
+            dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
@@ -339,5 +382,78 @@ private void startReminderThread() {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblClock;
     private javax.swing.JLabel lblWelcome;
+    private javax.swing.JPanel panelChart;
     // End of variables declaration//GEN-END:variables
+
+    private void tampilkanGrafik() {
+        // Ambil data dari MongoDB
+        long totalVaksin = MongoDBConnect.getCollection("jadwal_vaksin").countDocuments();
+        long totalCatatan = MongoDBConnect.getCollection("catatan_perawatan").countDocuments();
+        long totalHewan = MongoDBConnect.getCollection("data_hewan").countDocuments();
+
+        // Buat dataset untuk grafik
+        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
+        dataset.setValue("Vaksin", totalVaksin);
+        dataset.setValue("Catatan", totalCatatan);
+        dataset.setValue("Hewan", totalHewan);
+
+        // Buat chart
+        JFreeChart chart = ChartFactory.createPieChart(
+                "Statistik Data PetLog",
+                dataset,
+                true, true, false
+        );
+
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new java.awt.Dimension(panelChart.getWidth(), panelChart.getHeight()));
+
+        // Hapus isi panel dulu
+        panelChart.removeAll();
+
+        // Atur layout panel
+        panelChart.setLayout(new java.awt.BorderLayout());
+
+        // Masukkan chart
+        panelChart.add(chartPanel, java.awt.BorderLayout.CENTER);
+
+        // Refresh panel
+        panelChart.revalidate();
+        panelChart.repaint();
+    }
+
+//    private void tampilkanBarChart() {
+//// Ambil data dari MongoDB
+//    long totalVaksin = MongoDBConnect.getCollection("jadwal_vaksin").countDocuments();
+//    long totalCatatan = MongoDBConnect.getCollection("catatan_perawatan").countDocuments();
+//    long totalHewan = MongoDBConnect.getCollection("data_hewan").countDocuments();
+//
+//    // Buat dataset
+//    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+//    dataset.addValue(totalVaksin, "Jumlah", "Vaksin");
+//    dataset.addValue(totalCatatan, "Jumlah", "Catatan");
+//    dataset.addValue(totalHewan, "Jumlah", "Hewan");
+//
+//    // Buat chart
+//    JFreeChart barChart = ChartFactory.createBarChart(
+//            "Statistik Data PetLog",  // Judul
+//            "Kategori",               // Label X
+//            "Jumlah",                 // Label Y
+//            dataset, 
+//            PlotOrientation.VERTICAL,
+//            true, true, false
+//    );
+//
+//    // Buat ChartPanel
+//    ChartPanel chartPanel = new ChartPanel(barChart);
+//    chartPanel.setPreferredSize(new java.awt.Dimension(panelChart.getWidth(), panelChart.getHeight()));
+//
+//    // Kosongkan panel dan masukkan chart
+//    panelChart.removeAll();
+//    panelChart.setLayout(new java.awt.BorderLayout());
+//    panelChart.add(chartPanel, java.awt.BorderLayout.CENTER);
+//
+//    // Refresh panel
+//    panelChart.revalidate();
+//    panelChart.repaint();
+//}
 }

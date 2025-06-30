@@ -1,3 +1,4 @@
 [
-
+{"_id": {"$oid": "68589a0d530895f642e16fa5"}, "nama": "mozza", "jenis": "kucing", "usia": "4 bulan", "ras": "Himalaya", "catatan": "betina", "catatanTambahan": "betina", "jenisHewan": "betina", "namaHewan": "mozza"},
+{"_id": {"$oid": "68613e4fb17e7cb1bd671456"}, "nama": "Leo", "jenis": "Anjing", "usia": "1 Tahun", "ras": "Buldog", "catatan": "Jantan"}
 ]

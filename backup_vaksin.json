@@ -1,3 +1,4 @@
 [
-{"_id": {"$oid": "6857b54ab4aa5ba77a4df7cf"}, "nama": "Rabies", "tanggal": "2025-06-22"}
+{"_id": {"$oid": "6860838f8027d55ec1ff7c44"}, "namaHewan": "ciko", "namaVaksin": "rabiess", "tanggal": "2025-06-31"},
+{"_id": {"$oid": "68613df2b17e7cb1bd671455"}, "namaHewan": "mozza", "namaVaksin": "booster", "tanggal": "2025-06-30"}
 ]

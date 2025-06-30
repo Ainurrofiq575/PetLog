@@ -5,6 +5,9 @@
 package com.petlog.petlog.ui;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.petlog.petlog.service.CatatanService;
+import com.petlog.petlog.service.HewanService;
 import com.petlog.petlog.service.MongoDBConnect;
 import com.petlog.petlog.service.VaksinService;
 import javax.swing.JOptionPane;
@@ -23,7 +26,40 @@ public class LaporanTableForm extends javax.swing.JFrame {
     public LaporanTableForm() {
         initComponents();
         loadData(); // ⬅️ tampilkan semua data
+
+        txtSearch.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                performSearch();
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                performSearch();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                performSearch();
+            }
+
+            private void performSearch() {
+                String keyword = txtSearch.getText().trim();
+
+                // Panggil sesuai tabel aktif
+                if (tblVaksin.isShowing()) {
+                    searchVaksin(keyword);
+                } else if (tblCatatan.isShowing()) {
+                    searchCatatan(keyword);
+                } else if (tblHewan.isShowing()) {
+                    searchHewan(keyword);
+                }   
+            }
+        });
+
     }
+    
+    
     
     private void loadData() {
     loadVaksin();
@@ -45,6 +81,12 @@ public class LaporanTableForm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnKembali = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        btnCari = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         tabPane = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -57,19 +99,47 @@ public class LaporanTableForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 153, 153));
-        jPanel1.setPreferredSize(new java.awt.Dimension(400, 50));
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 60));
 
-        jButton1.setText("Edit");
+        jButton1.setText("Edit ✎");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Delete");
+        jButton2.setText("Delete 🗑️");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Algerian", 1, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("LAPORAN");
+
+        btnKembali.setText("Kembali");
+        btnKembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKembaliActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Search");
+
+        btnCari.setBackground(new java.awt.Color(255, 153, 153));
+        btnCari.setText("🔍");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
+
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
             }
         });
 
@@ -77,20 +147,45 @@ public class LaporanTableForm extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(236, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addGap(14, 14, 14))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(123, 123, 123)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCari)
+                        .addGap(7, 7, 7))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 27, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2)))
+                    .addComponent(jButton2)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(btnCari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReset))
+                .addGap(7, 7, 7))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
@@ -151,11 +246,11 @@ public class LaporanTableForm extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(tabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addComponent(tabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -168,38 +263,122 @@ public class LaporanTableForm extends javax.swing.JFrame {
     }//GEN-LAST:event_tblVaksinMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-int row = tblVaksin.getSelectedRow();
-if (row != -1) {
-    String id = tblVaksin.getValueAt(row, 0).toString();
-    String namaHewan = tblVaksin.getValueAt(row, 1).toString();
-    String namaVaksin = tblVaksin.getValueAt(row, 2).toString();
-    String tanggal = tblVaksin.getValueAt(row, 3).toString();
+        int rowVaksin = tblVaksin.getSelectedRow();
+        if (rowVaksin != -1) {
+            String id = tblVaksin.getValueAt(rowVaksin, 0).toString();
+            String namaHewan = tblVaksin.getValueAt(rowVaksin, 1).toString();
+            String namaVaksin = tblVaksin.getValueAt(rowVaksin, 2).toString();
+            String tanggal = tblVaksin.getValueAt(rowVaksin, 3).toString();
 
-    EditVaksin dialog = new EditVaksin(this, id, namaHewan, namaVaksin, tanggal);
-    dialog.setVisible(true);
+            EditVaksin dialog = new EditVaksin(this, id, namaHewan, namaVaksin, tanggal);
+            dialog.setVisible(true);
 
-    loadVaksin(); // Refresh tabel setelah dialog ditutup
-}
+            loadVaksin();
+        }
 
+        int rowCatatan = tblCatatan.getSelectedRow();
+        if (rowCatatan != -1) {
+            String id = tblCatatan.getValueAt(rowCatatan, 0).toString();
+            String jenis = tblCatatan.getValueAt(rowCatatan, 1).toString();
+            String tanggal = tblCatatan.getValueAt(rowCatatan, 2).toString();
+            String catatan = tblCatatan.getValueAt(rowCatatan, 3).toString();
+
+            EditCatatan dialog = new EditCatatan(this, id, jenis, tanggal, catatan);
+            dialog.setVisible(true);
+
+            loadCatatan();
+        }
+
+        int rowHewan = tblHewan.getSelectedRow();
+        if (rowHewan != -1) {
+            String id = tblHewan.getValueAt(rowHewan, 0).toString();
+            String nama = tblHewan.getValueAt(rowHewan, 1).toString();
+            String jenis = tblHewan.getValueAt(rowHewan, 2).toString();
+            String usia = tblHewan.getValueAt(rowHewan, 3).toString();
+            String ras = tblHewan.getValueAt(rowHewan, 4).toString();
+            String catatan = tblHewan.getValueAt(rowHewan, 5).toString();
+
+            EditHewan dialog = new EditHewan(this, id, nama, jenis, usia, ras, catatan);
+            dialog.setVisible(true);
+
+            loadHewan(); // refresh table
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih data hewan yang ingin diedit.");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-            int row = tblVaksin.getSelectedRow();
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus.");
-        return;
+    // Cek apakah baris dipilih di tabel vaksin
+    int rowVaksin = tblVaksin.getSelectedRow();
+    if (rowVaksin != -1) {
+        String id = tblVaksin.getValueAt(rowVaksin, 0).toString();
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Yakin ingin hapus data vaksin ini?", 
+            "Konfirmasi Hapus Vaksin", 
+            JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            VaksinService.hapus(id);
+            JOptionPane.showMessageDialog(this, "🗑️ Data vaksin berhasil dihapus.");
+            loadVaksin();
+        }
+        return;  // Sudah hapus vaksin, selesai
     }
 
-    String id = tblVaksin.getValueAt(row, 0).toString();
-
-    int confirm = JOptionPane.showConfirmDialog(this, "Yakin ingin hapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-    if (confirm == JOptionPane.YES_OPTION) {
-        VaksinService.hapus(id);
-        JOptionPane.showMessageDialog(this, "🗑️ Data berhasil dihapus.");
-        loadVaksin();
+    // Cek apakah baris dipilih di tabel catatan
+    int rowCatatan = tblCatatan.getSelectedRow();
+    if (rowCatatan != -1) {
+        String id = tblCatatan.getValueAt(rowCatatan, 0).toString();
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Yakin ingin hapus catatan ini?", 
+            "Konfirmasi Hapus Catatan", 
+            JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            CatatanService.delete(id);
+            JOptionPane.showMessageDialog(this, "🗑️ Catatan berhasil dihapus.");
+            loadCatatan();
+        }
+        return;  // Sudah hapus catatan, selesai
     }
+    
+        // Cek apakah baris dipilih di tabel hewan
+    int rowHewan = tblHewan.getSelectedRow();
+    if (rowHewan != -1) {
+        String id = tblHewan.getValueAt(rowHewan, 0).toString();
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Yakin ingin hapus data hewan ini?", 
+            "Konfirmasi Hapus Hewan", 
+            JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            HewanService.delete(id);
+            JOptionPane.showMessageDialog(this, "🗑️ Data hewan berhasil dihapus.");
+            loadHewan();
+        }
+        return;  // Sudah hapus hewan, selesai
+    }
+
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
+        // TODO add your handling code here:
+        new Dashboard().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnKembaliActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        String keyword = txtSearch.getText().trim();
+
+        searchVaksin(keyword);
+        searchCatatan(keyword);
+        searchHewan(keyword);
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        loadVaksin();
+        loadCatatan();
+        loadHewan();
+    }//GEN-LAST:event_btnResetActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,8 +416,13 @@ if (row != -1) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnKembali;
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -248,9 +432,10 @@ if (row != -1) {
     private javax.swing.JTable tblCatatan;
     private javax.swing.JTable tblHewan;
     private javax.swing.JTable tblVaksin;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
-    private void loadVaksin() {
+    public void loadVaksin() {
     DefaultTableModel model = new DefaultTableModel(new String[]{"ID", "Nama Hewan", "Nama Vaksin", "Tanggal"}, 0);
     MongoCollection<Document> col = MongoDBConnect.getCollection("jadwal_vaksin");
 
@@ -271,13 +456,15 @@ if (row != -1) {
 }
 
 
-    private void loadCatatan() {
-    DefaultTableModel model = new DefaultTableModel(new String[]{"Jenis", "Tanggal", "Catatan"}, 0);
+    public void loadCatatan() {
+    DefaultTableModel model = new DefaultTableModel(
+        new String[]{"ID", "Jenis", "Tanggal", "Catatan"}, 0
+    );
     MongoCollection<Document> col = MongoDBConnect.getCollection("catatan_perawatan");
 
     for (Document doc : col.find()) {
         model.addRow(new Object[]{
-            doc.getObjectId("_id").toHexString(), // Simpan ID sebagai String
+            doc.getObjectId("_id").toHexString(),
             doc.getString("jenis"),
             doc.getString("tanggal"),
             doc.getString("catatan")
@@ -285,22 +472,108 @@ if (row != -1) {
     }
 
     tblCatatan.setModel(model);
-        // Sembunyikan kolom ID (kolom 0)
+
+    // Sembunyikan kolom ID
     tblCatatan.getColumnModel().getColumn(0).setMinWidth(0);
     tblCatatan.getColumnModel().getColumn(0).setMaxWidth(0);
-    
-    
+}
+
+    public void loadHewan() {
+        DefaultTableModel model = new DefaultTableModel(
+                new String[]{"ID", "Nama", "Jenis", "Usia", "Ras", "Catatan"}, 0);
+
+        MongoCollection<Document> col = MongoDBConnect.getCollection("data_hewan");
+
+        for (Document doc : col.find()) {
+            model.addRow(new Object[]{
+                doc.getObjectId("_id").toHexString(),
+                doc.getString("nama"),
+                doc.getString("jenis"),
+                doc.getString("usia"),
+                doc.getString("ras"),
+                doc.getString("catatan")
+            });
+        }
+
+        tblHewan.setModel(model);
+
+        // Sembunyikan kolom ID (kolom 0)
+        tblHewan.getColumnModel().getColumn(0).setMinWidth(0);
+        tblHewan.getColumnModel().getColumn(0).setMaxWidth(0);
     }
 
-    private void loadHewan() {
-    DefaultTableModel model = new DefaultTableModel(new String[]{"Nama", "Jenis", "Usia", "Ras", "Catatan"}, 0);
-    MongoCollection<Document> col = MongoDBConnect.getCollection("data_hewan");
+    
+    DefaultTableModel model = new DefaultTableModel(new String[]{"ID", "Nama Hewan", "Nama Vaksin", "Tanggal"}, 0) {
+    public boolean isCellEditable(int row, int column) {
+        return column != 0; // ID tidak bisa diedit
+    }
+};
 
-    for (Document doc : col.find()) {
+    private void searchVaksin(String keyword) {
+        DefaultTableModel model = new DefaultTableModel(new String[]{"ID", "Nama Hewan", "Nama Vaksin", "Tanggal"}, 0);
+        MongoCollection<Document> col = MongoDBConnect.getCollection("jadwal_vaksin");
+
+        for (Document doc : col.find()) {
+            String namaHewan = doc.getString("namaHewan");
+            String namaVaksin = doc.getString("namaVaksin");
+            String tanggal = doc.getString("tanggal");
+
+            if ((namaHewan != null && namaHewan.toLowerCase().contains(keyword.toLowerCase()))
+                    || (namaVaksin != null && namaVaksin.toLowerCase().contains(keyword.toLowerCase()))
+                    || (tanggal != null && tanggal.toLowerCase().contains(keyword.toLowerCase()))) {
+
+                model.addRow(new Object[]{
+                    doc.getObjectId("_id").toHexString(),
+                    namaHewan,
+                    namaVaksin,
+                    tanggal
+                });
+            }
+        }
+        tblVaksin.setModel(model);
+        tblVaksin.getColumnModel().getColumn(0).setMinWidth(0);
+        tblVaksin.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+
+    private void searchCatatan(String keyword) {
+        DefaultTableModel model = new DefaultTableModel(new String[]{"ID", "Jenis", "Tanggal", "Catatan"}, 0);
+        MongoCollection<Document> col = MongoDBConnect.getCollection("catatan_perawatan");
+
+        for (Document doc : col.find(
+                Filters.or(
+                        Filters.regex("jenis", ".*" + keyword + ".*", "i"),
+                        Filters.regex("tanggal", ".*" + keyword + ".*", "i"),
+                        Filters.regex("catatan", ".*" + keyword + ".*", "i")
+                ))) {
+            model.addRow(new Object[]{
+                doc.getObjectId("_id").toHexString(),
+                doc.getString("jenis"),
+                doc.getString("tanggal"),
+                doc.getString("catatan")
+            });
+        }
+
+        tblCatatan.setModel(model);
+        tblCatatan.getColumnModel().getColumn(0).setMinWidth(0);
+        tblCatatan.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+
+    private void searchHewan(String keyword) {
+    DefaultTableModel model = new DefaultTableModel(new String[]{"ID", "Nama Hewan", "Jenis Hewan", "Usia", "Ras", "Catatan"}, 0);
+    MongoCollection<Document> col = MongoDBConnect.getCollection("hewan_peliharaan");
+
+    for (Document doc : col.find(
+            Filters.or(
+                Filters.regex("namaHewan", ".*" + keyword + ".*", "i"),
+                Filters.regex("jenisHewan", ".*" + keyword + ".*", "i"),
+                Filters.regex("usia", ".*" + keyword + ".*", "i"),
+                Filters.regex("ras", ".*" + keyword + ".*", "i"),
+                Filters.regex("catatan", ".*" + keyword + ".*", "i")
+            ))) {
         model.addRow(new Object[]{
-            doc.getObjectId("_id").toHexString(), // Simpan ID sebagai String
-            doc.getString("nama"),
-            doc.getString("jenis"),
+            doc.getObjectId("_id").toHexString(),
+            doc.getString("namaHewan"),
+            doc.getString("jenisHewan"),
             doc.getString("usia"),
             doc.getString("ras"),
             doc.getString("catatan")
@@ -308,14 +581,6 @@ if (row != -1) {
     }
 
     tblHewan.setModel(model);
-        // Sembunyikan kolom ID (kolom 0)
     tblHewan.getColumnModel().getColumn(0).setMinWidth(0);
-    tblHewan.getColumnModel().getColumn(0).setMaxWidth(0);
-    }
-    
-    DefaultTableModel model = new DefaultTableModel(new String[]{"ID", "Nama Hewan", "Nama Vaksin", "Tanggal"}, 0) {
-    public boolean isCellEditable(int row, int column) {
-        return column != 0; // ID tidak bisa diedit
-    }
-};
+    tblHewan.getColumnModel().getColumn(0).setMaxWidth(0);}
 }

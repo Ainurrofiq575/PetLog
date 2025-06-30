@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
  * @author LENOVO
  */
 public class EditVaksin extends javax.swing.JDialog {
+    private String id;
+    private LaporanTableForm parent;
 
     /**
      * Creates new form EditVaksin
@@ -40,7 +42,6 @@ public class EditVaksin extends javax.swing.JDialog {
         txtNamaVaksin.setText(namaVaksin);
         txtTanggal.setText(tanggal);
     }
-    private String id;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,6 +57,7 @@ public class EditVaksin extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        btnBatal = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -66,14 +68,17 @@ public class EditVaksin extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(90, 56, 36));
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 50));
 
         jLabel4.setFont(new java.awt.Font("Cambria", 0, 8)); // NOI18N
-        jLabel4.setText("jLabel4");
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("🐾 PetLog - EditVaksi");
 
         jLabel5.setFont(new java.awt.Font("Algerian", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("jLabel5");
+        jLabel5.setText("Edit Vaksin");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -93,12 +98,22 @@ public class EditVaksin extends javax.swing.JDialog {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
+        jPanel2.setBackground(new java.awt.Color(255, 153, 102));
         jPanel2.setPreferredSize(new java.awt.Dimension(400, 40));
 
+        jButton1.setBackground(new java.awt.Color(51, 255, 51));
         jButton1.setText("Simpan");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        btnBatal.setBackground(new java.awt.Color(255, 0, 0));
+        btnBatal.setText("Batal");
+        btnBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalActionPerformed(evt);
             }
         });
 
@@ -107,19 +122,25 @@ public class EditVaksin extends javax.swing.JDialog {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(201, Short.MAX_VALUE)
+                .addContainerGap(115, Short.MAX_VALUE)
+                .addComponent(btnBatal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addGap(14, 14, 14))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(11, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                    .addComponent(btnBatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
+
+        jPanel3.setBackground(new java.awt.Color(234, 213, 194));
 
         jLabel1.setText("Nama Hewan :");
 
@@ -187,6 +208,10 @@ public class EditVaksin extends javax.swing.JDialog {
         dispose(); // Tutup dialog
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBatalActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -230,6 +255,7 @@ public class EditVaksin extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBatal;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
